@@ -5,18 +5,18 @@
 <meta property="og:site_name" content="gjssss&#39; blog">
 <meta property="og:description" content="在Vue的列表渲染中，绑定组件的key属性来唯一的标识渲染列表的元素">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/渲染列表中的Key/image-20220120144702109.png">
-<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/渲染列表中的Key/image-20220120144924064.png">
-<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/渲染列表中的Key/image-20220120151612397.png">
-<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/渲染列表中的Key/image-20220120151642201.png">
-<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/渲染列表中的Key/image-20220120152015906.png">
+<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120144702109.png">
+<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120144924064.png">
+<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120151612397.png">
+<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120151642201.png">
+<meta property="og:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120152015906.png">
 <meta property="article:published_time" content="2022-01-20T06:29:23.482Z">
 <meta property="article:modified_time" content="2022-01-20T08:54:07.126Z">
 <meta property="article:author" content="gjsss">
 <meta property="article:tag" content="Vue3">
 <meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/渲染列表中的Key/image-20220120144702109.png"><title>列表渲染中的key | gjssss' blog</title><link ref="canonical" href="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><link rel="dns-prefetch" href="https://hm.baidu.com"><script>var _hmt = _hmt || [];
+<meta name="twitter:image" content="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120144702109.png"><title>列表渲染中的key | gjssss' blog</title><link ref="canonical" href="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><link rel="dns-prefetch" href="https://hm.baidu.com"><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement('script');
   hm.src = 'https://hm.baidu.com/hm.js?e5cf9a322772f32ad875e5168bfcc390';
@@ -40,10 +40,10 @@ var CONFIG = {
   back2top: {"enable":true},
   codeblock: {"style":"default","highlight":"light","wordWrap":false},
   reward: true,
-  fancybox: true,
-  zoomImage: undefined,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
   galleryWaterfall: undefined,
-  lazyload: true,
+  lazyload: false,
   pjax: undefined,
   externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
   shortcuts: undefined,
@@ -63,14 +63,10 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>当 Vue 正在更新使用 <code>v-for</code> 渲染的元素列表时，它默认使用“就地更新”的策略。如果数据项的顺序被改变，Vue 将不会移动 DOM 元素来匹配数据项的顺序，而是就地更新每个元素，并且确保它们在每个索引位置正确渲染。</p>
 </blockquote>
 <p>结合这段话，我们来看下面的例子，可以<span class="exturl"><a class="exturl__link" target="_blank" rel="noopener" href="https://codesandbox.io/s/vue-template-xmt14?fontsize=14">点击</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>尝试</p>
-
-        <img class="lazyload lazyload-gif" src="/images/loading.svg" data-src="渲染列表中的Key/image-20220120144702109.png" alt="image-20220120144702109">
-      
+<img src="/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120144702109.png" alt="image-20220120144702109">
 
 <p>首先我们将每个元素的输入框区分一下，点击第二个<code>delete</code>也就是删除第二个元素</p>
-
-        <img class="lazyload lazyload-gif" src="/images/loading.svg" data-src="渲染列表中的Key/image-20220120144924064.png" alt="image-20220120144924064">
-      
+<img src="/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120144924064.png" alt="image-20220120144924064">
 
 <p>可以发现结果并不是预期的，为什么前面的文本变成第三个元素的文本但是随后的表单却没有变呢？</p>
 <p>结合上面提到的文档中的内容</p>
@@ -86,28 +82,22 @@ window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></he
 <p>遍历替换的过程是新的列表会依次和旧的列表比较，首先比较第一个元素，发现第一个元素的p和f都一样，所以不进行更新。到第二个元素时，发现p不一样但是f都一样，所以只替换p。到第三个元素时发现新列表已经遍历结束了，所以就删除旧列表第三个元素</p>
 <p>因为对于Vue来说有一个<code>就地更新</code>的机制，并且判断每个input标签是否一样是不会比较他们的value属性，所以就产生了这种局部更新的bug</p>
 <p>当我们改变一下代码，将第三个元素的表单input标签的类型改成<code>radio</code></p>
-
-        <img class="lazyload lazyload-gif" src="/images/loading.svg" data-src="渲染列表中的Key/image-20220120151612397.png" alt="image-20220120151612397">
-      
+<img src="/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120151612397.png" alt="image-20220120151612397">
 
 <p>再进行删除第二个元素</p>
-
-        <img class="lazyload lazyload-gif" src="/images/loading.svg" data-src="渲染列表中的Key/image-20220120151642201.png" alt="image-20220120151642201">
-      
+<img src="/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120151642201.png" alt="image-20220120151642201">
 
 <p>发现此时删除后的结果就符合预期了，因为改变了第三个元素的type，导致第二个和第三个元素的f不同，所以Vue就会进行更新</p>
 
         <h2 id="使用key的渲染">
           <a href="#使用key的渲染" class="heading-link"><i class="fas fa-link"></i></a><a href="#使用key的渲染" class="headerlink" title="使用key的渲染"></a>使用key的渲染</h2>
       <p>在上面代码中加入key的定义<code>v-for=&quot;item,i in array&quot; :key=&quot;item.id&quot;</code>，再次尝试删除</p>
-
-        <img class="lazyload lazyload-gif" src="/images/loading.svg" data-src="渲染列表中的Key/image-20220120152015906.png" alt="image-20220120152015906">
-      
+<img src="/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/image-20220120152015906.png" alt="image-20220120152015906">
 
 <p>可以发现结果符合我们的预期，这是因为使用key后，Vue知道了如何分辨每个item，通过比较key的不同就可以确定要更新的不仅仅是前面的p，整个p和f都需要更新</p>
 </div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://gjssss.github.io">gjsss</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/">https://gjssss.github.io/2022/01/20/vue3/%E6%B8%B2%E6%9F%93%E5%88%97%E8%A1%A8%E4%B8%AD%E7%9A%84Key/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://gjssss.github.io/tags/Vue3/">Vue3</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://gjssss.github.io/tags/JavaScript/">JavaScript</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img" src="/images/zfb.jpg"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img" src="/images/wx.png"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2022/01/20/vue3/Vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9ADay5-%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93%E5%92%8C%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93/"><span class="paginator-prev__text">Vue3学习笔记：Day5 条件渲染和列表渲染</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div><div class="comments" id="comments"><div id="valine-container"></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%A1%E6%9C%89Key%E7%9A%84%E6%B8%B2%E6%9F%93"><span class="toc-number">1.</span> <span class="toc-text">
           没有Key的渲染</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8key%E7%9A%84%E6%B8%B2%E6%9F%93"><span class="toc-number">2.</span> <span class="toc-text">
-          使用key的渲染</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://qlogo3.store.qq.com/qzone/1615590366/1615590366/100" alt="avatar"></div><p class="sidebar-ov-author__text">世界上只有一种英雄主义，那就是看清生活的本质之后依然热爱它</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/gjssss" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="1615590366" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">2</div><div class="sidebar-ov-state-item__name">分类</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>gjssss</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span></div><div>托管于 <a href="https://pages.github.com/" rel="noopener" target="_blank">Github Pages</a></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.min.js"></script><script src="https://cdn.jsdelivr.net/npm/leancloud-storage@latest/dist/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function loadValine () {
+          使用key的渲染</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://qlogo3.store.qq.com/qzone/1615590366/1615590366/100" alt="avatar"></div><p class="sidebar-ov-author__text">世界上只有一种英雄主义，那就是看清生活的本质之后依然热爱它</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/gjssss" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="1615590366" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">2</div><div class="sidebar-ov-state-item__name">分类</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>gjssss</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span></div><div>托管于 <a href="https://pages.github.com/" rel="noopener" target="_blank">Github Pages</a></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/leancloud-storage@latest/dist/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function loadValine () {
   var GUEST_INFO = ['nick', 'mail', 'link'];
   var guest_info = 'nick,mail,link';
 
