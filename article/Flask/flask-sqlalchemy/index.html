@@ -1,0 +1,360 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="referrer" content="never"><meta data-draft-node="block" data-draft-type="table" data-size="normal" data-row-style="normal"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="baidu-site-verification" content="code-V14bejgNqx"><meta name="description" content="使用Flask-SQLAlchemy模块编写Flask应用的持久层，将数据库表结构和关系抽象成类，着重编写业务代码，避免了直接写底层SQL语句，简化开发流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flask-SQLAlchemy">
+<meta property="og:url" content="https://gjssss.github.io/article/Flask/flask-sqlalchemy/index.html">
+<meta property="og:site_name" content="gjssss&#39; blog">
+<meta property="og:description" content="使用Flask-SQLAlchemy模块编写Flask应用的持久层，将数据库表结构和关系抽象成类，着重编写业务代码，避免了直接写底层SQL语句，简化开发流程">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-30T08:48:58.458Z">
+<meta property="article:modified_time" content="2022-02-01T08:07:00.427Z">
+<meta property="article:author" content="gjsss">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Flask">
+<meta name="twitter:card" content="summary"><title>Flask-SQLAlchemy | gjssss' blog</title><link ref="canonical" href="https://gjssss.github.io/article/Flask/flask-sqlalchemy/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><link rel="dns-prefetch" href="https://hm.baidu.com"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?e5cf9a322772f32ad875e5168bfcc390';
+  hm.async = true;
+
+  if (false) {
+    hm.setAttribute('data-pjax', '');
+  }
+  var s = document.getElementsByTagName('script')[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();</script><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/reading/"><span class="header-nav-menu-item__icon"><i class="fas fa-book-open"></i></span><span class="header-nav-menu-item__text">阅读</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="javascript:;" onclick="return false;"><span class="header-nav-menu-item__icon"><i class="fas fa-align-left"></i></span><span class="header-nav-menu-item__text">文章</span></a><div class="header-nav-submenu"><div class="header-nav-submenu-item"><a class="header-nav-submenu-item__link" href="/archives/"><span class="header-nav-submenu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-submenu-item__text">归档</span></a></div><div class="header-nav-submenu-item"><a class="header-nav-submenu-item__link" href="/tags/"><span class="header-nav-submenu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-submenu-item__text">标签</span></a></div></div></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">gjssss' blog</div><div class="header-banner-info__subtitle"></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">Flask-SQLAlchemy</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-01-30</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">2.7k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">20分</span></span></div></header><div class="post-body"><p>使用<code>Flask-SQLAlchemy</code>模块编写Flask应用的持久层，将数据库表结构和关系抽象成类，着重编写业务代码，避免了直接写底层SQL语句，简化开发流程</p>
+<span id="more"></span>
+
+<p>Flask框架是一个特别轻量的Python Web框架，适合中小型项目开发，框架有很多插件对底层配置和代码做了很大的抽象，所以通过简单的阅读文档就可以编写一个Web应用，并且只需要编写业务逻辑即可</p>
+<p><code>Flask-SQLAlchemy</code>通过对SQLAlchemy包装，简化了对数据库的增删改查操作</p>
+
+        <h1 id="表模型">
+          <a href="#表模型" class="heading-link"><i class="fas fa-link"></i></a><a href="#表模型" class="headerlink" title="表模型"></a>表模型</h1>
+      <p>使用模型类来包装表，继承<code>db.Model</code>类声明一个模型类</p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Address</span>(<span class="params">db.Model</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    email = db.Column(db.String(<span class="number">120</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    person_id = db.Column(db.Integer, db.ForeignKey(<span class="string">&#x27;person.id&#x27;</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>(<span class="params">db.Model</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    name = db.Column(db.String(<span class="number">50</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    addresses = db.relationship(<span class="string">&#x27;Address&#x27;</span>, backref=<span class="string">&#x27;person&#x27;</span>, lazy=<span class="literal">True</span>)</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="表结构">
+          <a href="#表结构" class="heading-link"><i class="fas fa-link"></i></a><a href="#表结构" class="headerlink" title="表结构"></a>表结构</h2>
+      <p>通过定义类变量来声明表结构</p>
+<p>使用<code>db.Colum()</code>方法来生成列</p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">email = db.Column(db.String(<span class="number">120</span>), nullable=<span class="literal">False</span>)</span><br></pre></td></tr></table></div></figure>
+
+<p>其中可选类型如下</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th align="left">类型名</th>
+<th align="left">Python类型</th>
+<th align="left">说 明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Integer</td>
+<td align="left">int</td>
+<td align="left">普通整数,一般是 32 位</td>
+</tr>
+<tr>
+<td align="left">SmallInteger</td>
+<td align="left">int</td>
+<td align="left">取值范围小的整数,一般是 16 位</td>
+</tr>
+<tr>
+<td align="left">BigInteger</td>
+<td align="left">int 或 long</td>
+<td align="left">不限制精度的整数</td>
+</tr>
+<tr>
+<td align="left">Float</td>
+<td align="left">float</td>
+<td align="left">浮点数</td>
+</tr>
+<tr>
+<td align="left">Numeric</td>
+<td align="left">decimal.Decimal</td>
+<td align="left">定点数</td>
+</tr>
+<tr>
+<td align="left">String</td>
+<td align="left">str</td>
+<td align="left">变长字符串</td>
+</tr>
+<tr>
+<td align="left">Text</td>
+<td align="left">str</td>
+<td align="left">变长字符串,对较长或不限长度的字符串做了优化</td>
+</tr>
+<tr>
+<td align="left">Unicode</td>
+<td align="left">unicode</td>
+<td align="left">变长 Unicode 字符串</td>
+</tr>
+<tr>
+<td align="left">UnicodeText</td>
+<td align="left">unicode</td>
+<td align="left">变长 Unicode 字符串,对较长或不限长度的字符串做了优化</td>
+</tr>
+<tr>
+<td align="left">Boolean</td>
+<td align="left">bool</td>
+<td align="left">布尔值</td>
+</tr>
+<tr>
+<td align="left">Date</td>
+<td align="left">datetime.date</td>
+<td align="left">日期</td>
+</tr>
+<tr>
+<td align="left">Time</td>
+<td align="left">datetime.time</td>
+<td align="left">时间</td>
+</tr>
+<tr>
+<td align="left">DateTime</td>
+<td align="left">datetime.datetime</td>
+<td align="left">日期和时间</td>
+</tr>
+<tr>
+<td align="left">Interval</td>
+<td align="left">datetime.timedelta</td>
+<td align="left">时间间隔</td>
+</tr>
+<tr>
+<td align="left">Enum</td>
+<td align="left">str</td>
+<td align="left">一组字符串</td>
+</tr>
+<tr>
+<td align="left">PickleType</td>
+<td align="left">任何 Python 对象</td>
+<td align="left">自动使用 Pickle 序列化</td>
+</tr>
+<tr>
+<td align="left">LargeBinary</td>
+<td align="left">str</td>
+<td align="left">二进制文件</td>
+</tr>
+</tbody></table></div>
+<p>可以使用原生SQLAlchemy来表示unsigned类型</p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.dialects.mysql <span class="keyword">import</span> BIGINT</span><br><span class="line"></span><br><span class="line">db.Column(BIGINT(unsigned=<span class="literal">True</span>))</span><br></pre></td></tr></table></div></figure>
+
+<p>可选的键如下</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th align="left">选项名</th>
+<th align="left">说 明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">primary_key</td>
+<td align="left">如果设为 True ,这列就是表的主键</td>
+</tr>
+<tr>
+<td align="left">unique</td>
+<td align="left">如果设为 True ,这列不允许出现重复的值</td>
+</tr>
+<tr>
+<td align="left">index</td>
+<td align="left">如果设为 True ,为这列创建索引,提升查询效率</td>
+</tr>
+<tr>
+<td align="left">nullable</td>
+<td align="left">如果设为 True ,这列允许使用空值;如果设为 False ,这列不允许使用空值</td>
+</tr>
+<tr>
+<td align="left">default</td>
+<td align="left">为这列定义默认值</td>
+</tr>
+</tbody></table></div>
+
+        <h2 id="表关系">
+          <a href="#表关系" class="heading-link"><i class="fas fa-link"></i></a><a href="#表关系" class="headerlink" title="表关系"></a>表关系</h2>
+      
+        <h3 id="一对多关系">
+          <a href="#一对多关系" class="heading-link"><i class="fas fa-link"></i></a><a href="#一对多关系" class="headerlink" title="一对多关系"></a>一对多关系</h3>
+      <p>如建立两个表，<code>Person</code>和<code>Address</code>，一个<code>Person</code>可以有多个<code>Address</code>，则<code>Person</code>就代表一而<code>Address</code>就代表多，则需要在<code>Address</code>中设置<code>Person_id</code>的外键，在<code>Flask-SQLAlchemy</code>中还可以在<code>Person</code>中声明和其他模型的关系</p>
+<p><code>person_id = db.Column(db.Integer, db.ForeignKey(&#39;person.id&#39;), nullable=False)</code></p>
+<p><code>addresses = db.relationship(&#39;Address&#39;, backref=&#39;person&#39;, lazy=True)</code></p>
+<p>这样设置可以在对象中直接调用，如有一个<code>Person</code>对象Jack，即可以使用<code>Jack.addresses</code>来获得他所有的<code>Address</code>数组，这是通过<code>relationship</code>中第一个参数模型名来实现的</p>
+<p>在地址中调用<code>SomeAddress.person</code>即可以获得连接的<code>Person</code>对象，这是通过<code>backref</code>来实现的</p>
+
+        <h4 id="lazy">
+          <a href="#lazy" class="heading-link"><i class="fas fa-link"></i></a><a href="#lazy" class="headerlink" title="lazy"></a>lazy</h4>
+      <p>lazy参数说明将怎么加载连接的数据</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>select</td>
+<td>就是访问到属性的时候，就会全部加载该属性的数据</td>
+</tr>
+<tr>
+<td>joined</td>
+<td>对关联的两个表使用联接</td>
+</tr>
+<tr>
+<td>subquery</td>
+<td>与joined类似，但使用子子查询</td>
+</tr>
+<tr>
+<td>dynamic</td>
+<td>不加载记录，但提供加载记录的查询，也就是生成query对象</td>
+</tr>
+</tbody></table></div>
+<p>注意当使用<code>dynamic</code>时，返回的是一个query对象，需要在其后使用<code>.all()</code>或<code>.first()</code>获得模型对象</p>
+
+        <h3 id="多对多关系">
+          <a href="#多对多关系" class="heading-link"><i class="fas fa-link"></i></a><a href="#多对多关系" class="headerlink" title="多对多关系"></a>多对多关系</h3>
+      <p>关系型数据库多对多关系使用中间表来实现，在SQL-Alchemy中中间表不使用模型创建，直接创建表<code>Table</code></p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">article_tag = db.Table(<span class="string">&#x27;article_tag&#x27;</span>,</span><br><span class="line">                       db.Column(<span class="string">&#x27;article_id&#x27;</span>, db.Integer, db.ForeignKey(<span class="string">&#x27;article.id&#x27;</span>), primary_key=<span class="literal">True</span>),</span><br><span class="line">                       db.Column(<span class="string">&#x27;tag_id&#x27;</span>, db.Integer, db.ForeignKey(<span class="string">&#x27;tag.id&#x27;</span>), primary_key=<span class="literal">True</span>)</span><br><span class="line">                       )</span><br></pre></td></tr></table></div></figure>
+
+<p>使用外键连接其他表</p>
+<p>在<code>article</code>表中使用<code>relationship</code>中的<code>secondary</code>来指出次要表，使用<code>backref</code>来说明反向引用自己的名称</p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Article</span>(<span class="params">db.Model</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&#x27;article&#x27;</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>, autoincrement=<span class="literal">True</span>)</span><br><span class="line">    title = db.Column(db.String(<span class="number">100</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    tags = db.relationship(<span class="string">&#x27;Tag&#x27;</span>, secondary=article_tag, backref=db.backref(<span class="string">&#x27;articles&#x27;</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tag</span>(<span class="params">db.Model</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&#x27;tag&#x27;</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>, autoincrement=<span class="literal">True</span>)</span><br><span class="line">    name = db.Column(db.String(<span class="number">100</span>), nullable=<span class="literal">False</span>)</span><br></pre></td></tr></table></div></figure>
+
+<p>就完成了连接</p>
+<p>在访问时可以直接使用<code>artical.tags</code>访问文章的所有标签，使用<code>tag.articles</code>来访问标签所有的文章</p>
+
+        <h1 id="增删改查">
+          <a href="#增删改查" class="heading-link"><i class="fas fa-link"></i></a><a href="#增删改查" class="headerlink" title="增删改查"></a>增删改查</h1>
+      <p>增删使用<code>db.session.add()</code>和<code>db.session.delete()</code>传入要增加的或者要删除的实体即可</p>
+<p>查找使用表模型的<code>query</code>对象</p>
+<p>Retrieve a user by username:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; peter = User.query.filter_by(username=<span class="string">&#x27;peter&#x27;</span>).first()</span><br><span class="line">&gt;&gt;&gt; peter.id</span><br><span class="line">2</span><br><span class="line">&gt;&gt;&gt; peter.email</span><br><span class="line">u<span class="string">&#x27;peter@example.org&#x27;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Same as above but for a non existing username gives None:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; missing = User.query.filter_by(username=<span class="string">&#x27;missing&#x27;</span>).first()</span><br><span class="line">&gt;&gt;&gt; missing is None</span><br><span class="line">True</span><br></pre></td></tr></table></div></figure>
+
+<p>Selecting a bunch of users by a more complex expression:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; User.query.filter(User.email.endswith(<span class="string">&#x27;@example.com&#x27;</span>)).all()</span><br><span class="line">[&lt;User u<span class="string">&#x27;admin&#x27;</span>&gt;, &lt;User u<span class="string">&#x27;guest&#x27;</span>&gt;]</span><br></pre></td></tr></table></div></figure>
+
+<p>Ordering users by something:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; User.query.order_by(User.username).all()</span><br><span class="line">[&lt;User u<span class="string">&#x27;admin&#x27;</span>&gt;, &lt;User u<span class="string">&#x27;guest&#x27;</span>&gt;, &lt;User u<span class="string">&#x27;peter&#x27;</span>&gt;]</span><br></pre></td></tr></table></div></figure>
+
+<p>Limiting users:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; User.query.limit(1).all()</span><br><span class="line">[&lt;User u<span class="string">&#x27;admin&#x27;</span>&gt;]</span><br></pre></td></tr></table></div></figure>
+
+<p>Getting user by primary key:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; User.query.get(1)</span><br><span class="line">&lt;User u<span class="string">&#x27;admin&#x27;</span>&gt;</span><br></pre></td></tr></table></div></figure>
+
+<p>更改使用查询出的数据库中实体，改变其属性即可</p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p = Person.query.get(<span class="number">1</span>)</span><br><span class="line">p.name = <span class="string">&#x27;Tom&#x27;</span></span><br><span class="line">db.session.commit()</span><br></pre></td></tr></table></div></figure>
+
+
+        <h1 id="返回JSON">
+          <a href="#返回JSON" class="heading-link"><i class="fas fa-link"></i></a><a href="#返回JSON" class="headerlink" title="返回JSON"></a>返回JSON</h1>
+      <p>使用Flask作为后端，要向前端发送JSON数据，而Flask-SQLAlchemy我还没有找到可以返回字典类型的结果的办法，所以目前找到的办法一共有两种</p>
+
+        <h2 id="使用dataclasses库">
+          <a href="#使用dataclasses库" class="heading-link"><i class="fas fa-link"></i></a><a href="#使用dataclasses库" class="headerlink" title="使用dataclasses库"></a>使用<code>dataclasses</code>库</h2>
+      <p>Python3.7以上的版本可以使用<code>dataclasses</code>库来直接将实体模型类返回成JSON数据的HTTP响应</p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass</span><br><span class="line"></span><br><span class="line"><span class="meta">@dataclass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Address</span>(<span class="params">db.Model</span>):</span></span><br><span class="line">    <span class="built_in">id</span>: <span class="built_in">int</span></span><br><span class="line">    email: <span class="built_in">str</span></span><br><span class="line">    person_id: <span class="built_in">int</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    email = db.Column(db.String(<span class="number">120</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    person_id = db.Column(db.Integer, db.ForeignKey(<span class="string">&#x27;person.id&#x27;</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    </span><br><span class="line"><span class="meta">@dataclass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>(<span class="params">db.Model</span>):</span></span><br><span class="line">    <span class="built_in">id</span>: <span class="built_in">int</span></span><br><span class="line">    name: <span class="built_in">str</span></span><br><span class="line">    addresses: Address</span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    name = db.Column(db.String(<span class="number">50</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    addresses = db.relationship(<span class="string">&#x27;Address&#x27;</span>, backref=<span class="string">&#x27;p&#x27;</span>, lazy=<span class="literal">True</span>, passive_deletes=<span class="literal">True</span>)</span><br></pre></td></tr></table></div></figure>
+
+<p>在使用时可以直接使用Flask中的<code>jsonify</code></p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/persons/&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">persons</span>():</span></span><br><span class="line">    ps = Person.query.<span class="built_in">all</span>()</span><br><span class="line">    <span class="keyword">return</span> jsonify(ps)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/addrs/&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">addrs</span>():</span></span><br><span class="line">    addrs = Address.query.<span class="built_in">all</span>()</span><br><span class="line">    <span class="keyword">return</span> jsonify(addrs)</span><br></pre></td></tr></table></div></figure>
+
+<p>结果为</p>
+<figure class="highlight json"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">&quot;addresses&quot;</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">&quot;email&quot;</span>: <span class="string">&quot;gjss@a.com&quot;</span>,</span><br><span class="line">                <span class="attr">&quot;id&quot;</span>: <span class="number">2</span>,</span><br><span class="line">                <span class="attr">&quot;person_id&quot;</span>: <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Tom&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">&quot;addresses&quot;</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">&quot;email&quot;</span>: <span class="string">&quot;gjs@a.com&quot;</span>,</span><br><span class="line">                <span class="attr">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="attr">&quot;person_id&quot;</span>: <span class="number">2</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;id&quot;</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;jack&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></div></figure>
+
+<figure class="highlight json"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">&quot;email&quot;</span>: <span class="string">&quot;gjs@a.com&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">&quot;person_id&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">&quot;email&quot;</span>: <span class="string">&quot;gjss@a.com&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;id&quot;</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">&quot;person_id&quot;</span>: <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></div></figure>
+
+<p>可以发现，当使用<code>dataclass</code>时，可以将基础类型的数据转换成JSON，还可以将可以将已经声明过<code>dataclass</code>类型的变量转换成JSON</p>
+<p>但是可能发现，如果想实现在Address的结果中加入Person好像有些困难，即显示Address是哪个Person的Person信息，经过我分析尝试后，可以声明一个空变量来实现</p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@dataclass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Address</span>(<span class="params">db.Model</span>):</span></span><br><span class="line">    <span class="built_in">id</span>: <span class="built_in">int</span></span><br><span class="line">    email: <span class="built_in">str</span></span><br><span class="line">    person_id: <span class="built_in">int</span></span><br><span class="line">    p: Person</span><br><span class="line"></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    email = db.Column(db.String(<span class="number">120</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    person_id = db.Column(db.Integer, db.ForeignKey(<span class="string">&#x27;person.id&#x27;</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    p = <span class="literal">None</span></span><br></pre></td></tr></table></div></figure>
+
+<p>其中Person变量的名称要和<code>addresses = db.relationship(&#39;Address&#39;, backref=&#39;p&#39;, lazy=True, passive_deletes=True)</code>中<code>relationship</code>的<code>backref</code>参数相同，即可以返回出Person的信息，但要注意删除之前的<code>addresses: Address</code>，因为这样会互相引用导致无限循环超出JSON嵌套的范围而报错</p>
+<figure class="highlight json"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">&quot;email&quot;</span>: <span class="string">&quot;gjs@a.com&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">&quot;p&quot;</span>: </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;id&quot;</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;jack&quot;</span></span><br><span class="line">        &#125;,	</span><br><span class="line">        <span class="attr">&quot;person_id&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">&quot;email&quot;</span>: <span class="string">&quot;gjss@a.com&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;id&quot;</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">&quot;p&quot;</span>: </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Tom&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;person_id&quot;</span>: <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></div></figure>
+
+<p>没有翻出源码，但是根据观察和<code>relationship</code>的注释</p>
+<blockquote>
+<p>​    :param backreef:</p>
+<p>​     Indicates the string name of a property to be placed on the related mapper’s class that will handle this relationship in the other direction. The other property will be created automatically when the mappers are configured.  Can also be passed as a :func:<code>.backref</code> object to control the configuration of the new relationship.</p>
+</blockquote>
+<p>可以知道配置了<code>backref</code>映射后，会自动生成变量</p>
+<p>在查询出的Address对象中可以使用<code>Address.p</code>来访问其Person对象，实现的方式应该是通过<code>relationship</code>对Address注入了<code>backref</code>的变量，但因为变量是在运行时所注入，而在程序启动时没有p变量，因此不可以直接在类下声明p变量的类型，所以先定义一个空对象，其目的在于告诉<code>classdata</code>这个类存在这个对象，其次在定义p的类型，而在查询获得这个Address实体时，已经被注入，所以进而会生成p变量的JSON字符串</p>
+
+        <h2 id="使用查询结果拼接成字典">
+          <a href="#使用查询结果拼接成字典" class="heading-link"><i class="fas fa-link"></i></a><a href="#使用查询结果拼接成字典" class="headerlink" title="使用查询结果拼接成字典"></a>使用查询结果拼接成字典</h2>
+      <p>这个方法好理解并且简单，就是通过访问模型实体中的数据，拼接成JSON字符串如</p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/index/&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">router</span>():</span></span><br><span class="line">    ps = Person.query.<span class="built_in">all</span>()</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span>: ps[<span class="number">0</span>].name,</span><br><span class="line">        <span class="string">&#x27;id&#x27;</span>: ps[<span class="number">0</span>].<span class="built_in">id</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></div></figure>
+
+<p>或者在模型类中加入方法<code>as_dict()</code></p>
+<figure class="highlight python"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">as_dict</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">return</span> &#123;c.name: <span class="built_in">getattr</span>(self, c.name) <span class="keyword">for</span> c <span class="keyword">in</span> self.__table__.columns&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p>调用<code>ps[0].as_dict()</code>方法即可返回字典类型数据，本质还是拼接</p>
+
+        <h2 id="优点和缺点">
+          <a href="#优点和缺点" class="heading-link"><i class="fas fa-link"></i></a><a href="#优点和缺点" class="headerlink" title="优点和缺点"></a>优点和缺点</h2>
+      <ul>
+<li>第一种方法简单方便，在返回成字符串后不需要使用更多的代码，可以说是直接生成HTTP响应一步到位，看起来也更简约，满足了强迫症，但是我试了好多方法，其中的数据改变是很困难的，包括更改删除和增加，唯一可以实现的途径就是更改查询后的实体模型中的变量，但事后要注意要回滚，否则很容易更改源数据库中的数据，并且所有可以生成的变量全部在代码中写死，<code>jsonify</code>返回的更是<code>Response</code>类型的对象，更改其中数据变得十分困难和麻烦</li>
+<li>第二种方法要自己一个个拼接字典生成JSON，操作麻烦但是可变型高，可以根据需求酌情选择数据，并且通过模型实体中的关系可以很好的找到其连接的表的数据</li>
+</ul>
+<p>在实际中应根据情况选择两者使用的方式和场景，目前只找到这两种方式，其实如果可以直接返回字典类型的数据，根据情况删减是最好的，不知道SQLAlchemy是否支持，也没有找到类似的配置</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://gjssss.github.io">gjsss</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://gjssss.github.io/article/Flask/flask-sqlalchemy/">https://gjssss.github.io/article/Flask/flask-sqlalchemy/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://gjssss.github.io/tags/Python/">Python</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://gjssss.github.io/tags/Flask/">Flask</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img" src="/images/zfb.jpg"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img" src="/images/wx.png"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/article/Vue3/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9Aday7-%E7%BB%84%E4%BB%B6%E6%A6%82%E8%AE%BA/"><span class="paginator-prev__text">Vue3学习笔记：Day7 组件概论</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div><div class="comments" id="comments"><div id="valine-container"></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A1%A8%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">
+          表模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">
+          表结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.</span> <span class="toc-text">
+          表关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.1.</span> <span class="toc-text">
+          一对多关系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#lazy"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">
+          lazy</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.2.</span> <span class="toc-text">
+          多对多关系</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5"><span class="toc-number">2.</span> <span class="toc-text">
+          增删改查</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%94%E5%9B%9EJSON"><span class="toc-number">3.</span> <span class="toc-text">
+          返回JSON</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8dataclasses%E5%BA%93"><span class="toc-number">3.1.</span> <span class="toc-text">
+          使用dataclasses库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8B%BC%E6%8E%A5%E6%88%90%E5%AD%97%E5%85%B8"><span class="toc-number">3.2.</span> <span class="toc-text">
+          使用查询结果拼接成字典</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E7%82%B9%E5%92%8C%E7%BC%BA%E7%82%B9"><span class="toc-number">3.3.</span> <span class="toc-text">
+          优点和缺点</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://qlogo3.store.qq.com/qzone/1615590366/1615590366/100" alt="avatar"></div><p class="sidebar-ov-author__text">世界上只有一种英雄主义，那就是看清生活的本质之后依然热爱它</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/gjssss" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="tencent://snsapp/?cmd=2&amp;ver=1&amp;uin=1615590366" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">4</div><div class="sidebar-ov-state-item__name">分类</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>gjssss</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span></div><div>托管于 <a href="https://pages.github.com/" rel="noopener" target="_blank">Github Pages</a></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/leancloud-storage@latest/dist/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function loadValine () {
+  var GUEST_INFO = ['nick', 'mail', 'link'];
+  var guest_info = 'nick,mail,link';
+
+  guest_info = guest_info.split(',').filter(function(item) {
+    return GUEST_INFO.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#valine-container',
+    appId: 'JCthDOkCPwc0Bb4QouaTyS0W-gzGzoHsz',
+    appKey: 'QOLSVgtJvDuML7MvqrS4mxTt',
+    notify: true,
+    verify: true,
+    placeholder: '快来发表你的评论吧~',
+    avatar: 'mp',
+    meta: guest_info,
+    pageSize: '10' || 10,
+    visitor: false,
+    recordIP: true,
+    lang: 'zh-cn' || 'zh-cn',
+    path: window.location.pathname
+  });
+}
+
+if (false) {
+  loadValine();
+} else {
+  window.addEventListener('DOMContentLoaded', loadValine, false);
+}</script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>

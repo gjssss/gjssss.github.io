@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="referrer" content="never"><meta data-draft-node="block" data-draft-type="table" data-size="normal" data-row-style="normal"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="baidu-site-verification" content="code-V14bejgNqx"><meta name="description" content="🙂创建Vue应用，了解Vue组件的生命周期，Vue3模板语法 : ) 🎇">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue3学习笔记：Day2 应用和">
+<meta property="og:url" content="https://gjssss.github.io/article/Vue3/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9Aday2-%E5%BA%94%E7%94%A8%E5%92%8C/index.html">
+<meta property="og:site_name" content="gjssss&#39; blog">
+<meta property="og:description" content="🙂创建Vue应用，了解Vue组件的生命周期，Vue3模板语法 : ) 🎇">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://v3.cn.vuejs.org/images/lifecycle.svg">
+<meta property="article:published_time" content="2022-01-16T03:55:40.872Z">
+<meta property="article:modified_time" content="2022-02-01T08:07:00.437Z">
+<meta property="article:author" content="gjsss">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue3">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://v3.cn.vuejs.org/images/lifecycle.svg"><title>Vue3学习笔记：Day2 应用和 | gjssss' blog</title><link ref="canonical" href="https://gjssss.github.io/article/Vue3/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9Aday2-%E5%BA%94%E7%94%A8%E5%92%8C/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><link rel="dns-prefetch" href="https://hm.baidu.com"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?e5cf9a322772f32ad875e5168bfcc390';
+  hm.async = true;
+
+  if (false) {
+    hm.setAttribute('data-pjax', '');
+  }
+  var s = document.getElementsByTagName('script')[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();</script><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/reading/"><span class="header-nav-menu-item__icon"><i class="fas fa-book-open"></i></span><span class="header-nav-menu-item__text">阅读</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="javascript:;" onclick="return false;"><span class="header-nav-menu-item__icon"><i class="fas fa-align-left"></i></span><span class="header-nav-menu-item__text">文章</span></a><div class="header-nav-submenu"><div class="header-nav-submenu-item"><a class="header-nav-submenu-item__link" href="/archives/"><span class="header-nav-submenu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-submenu-item__text">归档</span></a></div><div class="header-nav-submenu-item"><a class="header-nav-submenu-item__link" href="/tags/"><span class="header-nav-submenu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-submenu-item__text">标签</span></a></div></div></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">gjssss' blog</div><div class="header-banner-info__subtitle"></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">Vue3学习笔记：Day2 应用和</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-01-16</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">846</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">6分</span></span></div></header><div class="post-body"><p>🙂创建Vue应用，了解Vue组件的生命周期，Vue3模板语法 : ) 🎇</p>
+<span id="more"></span>
+
+
+        <h2 id="Vue应用">
+          <a href="#Vue应用" class="heading-link"><i class="fas fa-link"></i></a><a href="#Vue应用" class="headerlink" title="Vue应用"></a>Vue应用</h2>
+      <p>每一个Vue应用都是用<code>createApp</code>函数创建一个实例开始的，在创建时可以向其中传入<strong>根组件</strong></p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> RootComponent = &#123; </span><br><span class="line">  <span class="comment">/* 选项 */</span> </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> app = Vue.createApp(RootComponent)</span><br><span class="line">               .component(<span class="string">&#x27;SearchInput&#x27;</span>, SearchInputComponent)</span><br><span class="line">               .directive(<span class="string">&#x27;focus&#x27;</span>, FocusDirective)</span><br><span class="line">               .use(LocalePlugin)</span><br><span class="line"><span class="keyword">const</span> vm = app.mount(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></div></figure>
+
+<p>大多数方法都会返回应用的实例，所以可以使用链式编写代码，但<code>mount</code>函数返回的是<strong>根节点的实例</strong>，我认为根节点是使用<code>RootComponent</code>从应用中创建模板实例，<code>RootComponent</code>是创建根节点的一些属性。–<em>（此处也不太清楚）</em>–</p>
+
+        <h2 id="组件">
+          <a href="#组件" class="heading-link"><i class="fas fa-link"></i></a><a href="#组件" class="headerlink" title="组件"></a>组件</h2>
+      <p>大多数应用的组件都嵌套成树的结构</p>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Root Component</span><br><span class="line">└─ TodoList</span><br><span class="line">   ├─ TodoItem</span><br><span class="line">   │  ├─ DeleteTodoButton</span><br><span class="line">   │  └─ EditTodoButton</span><br><span class="line">   └─ TodoListFooter</span><br><span class="line">      ├─ ClearTodosButton</span><br><span class="line">      └─ TodoListStatistics</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="组件属性">
+          <a href="#组件属性" class="heading-link"><i class="fas fa-link"></i></a><a href="#组件属性" class="headerlink" title="组件属性"></a>组件属性</h3>
+      <p>组件属性定义在<code>data()</code>中，可以在组件实例中直接访问</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> app = Vue.createApp(&#123;</span><br><span class="line">  <span class="function"><span class="title">data</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">count</span>: <span class="number">4</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">const</span> vm = app.mount(<span class="string">&#x27;#app&#x27;</span>)</span><br><span class="line"><span class="built_in">console</span>.log(vm.count) <span class="comment">// =&gt; 4</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Vue内置的属性通过使用<code>$</code>前缀区分用户定义的属性</p>
+
+        <h3 id="生命周期">
+          <a href="#生命周期" class="heading-link"><i class="fas fa-link"></i></a><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3>
+      <p><img src="https://v3.cn.vuejs.org/images/lifecycle.svg" alt="生命周期"></p>
+<p>图中的方法为生命周期钩子，即某个动作前后的回调函数</p>
+
+        <h2 id="模板">
+          <a href="#模板" class="heading-link"><i class="fas fa-link"></i></a><a href="#模板" class="headerlink" title="模板"></a>模板</h2>
+      <p>所有的模板都是合法的HTML，可以被浏览器所解析。模板在运行时会被编译成DOM渲染函数，所以也可以直接写DOM渲染函数</p>
+
+        <h3 id="文本">
+          <a href="#文本" class="heading-link"><i class="fas fa-link"></i></a><a href="#文本" class="headerlink" title="文本"></a>文本</h3>
+      <p>使用<code>v-once</code>指令表示此处绑定的属性不会更新</p>
+<figure class="highlight html"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">v-once</span>&gt;</span>这个将不会改变: &#123;&#123; msg &#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>使用<code>v-html</code>指令表示后面插入的属性会被当作HTML文本</p>
+<figure class="highlight html"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Using mustaches: &#123;&#123; rawHtml &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Using v-html directive: <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-html</span>=<span class="string">&quot;rawHtml&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>注意Vue并不是基于字符串的引擎，用字符串当模板效率低而且不安全，应使用组件来表示重复调用的HTML代码</p>
+
+        <h3 id="属性">
+          <a href="#属性" class="heading-link"><i class="fas fa-link"></i></a><a href="#属性" class="headerlink" title="属性"></a>属性</h3>
+      <p>属性使用<code>v-bind</code>指令，前面已经演示</p>
+<div style="background:pink;color:black;padding:5px;border-radius:20px;">如果属性值绑定的property是truthy，将会出现在HTML中，如果是falsy（除空字符串外），此属性将会省略不出现在HTML文本中</div>
+
+<blockquote>
+<p>Truthy</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="keyword">if</span> (<span class="literal">true</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (&#123;&#125;)</span><br><span class="line">&gt;<span class="keyword">if</span> ([])</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="number">42</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="string">&quot;foo&quot;</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="keyword">new</span> <span class="built_in">Date</span>())</span><br><span class="line">&gt;<span class="keyword">if</span> (-<span class="number">42</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="number">3.14</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (-<span class="number">3.14</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="literal">Infinity</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (-<span class="literal">Infinity</span>)</span><br></pre></td></tr></table></div></figure>
+
+<p>Falsy</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="keyword">if</span> (<span class="literal">false</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="literal">null</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="literal">undefined</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="number">0</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="number">0n</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="literal">NaN</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="string">&quot;&quot;</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="string">``</span>)</span><br><span class="line">&gt;<span class="keyword">if</span> (<span class="built_in">document</span>.all)</span><br></pre></td></tr></table></div></figure>
+</blockquote>
+
+        <h3 id="指令">
+          <a href="#指令" class="heading-link"><i class="fas fa-link"></i></a><a href="#指令" class="headerlink" title="指令"></a>指令</h3>
+      
+        <h4 id="动态参数">
+          <a href="#动态参数" class="heading-link"><i class="fas fa-link"></i></a><a href="#动态参数" class="headerlink" title="动态参数"></a>动态参数</h4>
+      <figure class="highlight html"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">v-on:</span>[<span class="attr">eventName</span>]=<span class="string">&quot;doSomething&quot;</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>使用中括号表示指令参数<code>eventName</code>和property绑定</p>
+
+        <h4 id="修饰符">
+          <a href="#修饰符" class="heading-link"><i class="fas fa-link"></i></a><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h4>
+      <p>使用<code>.prevent</code> 修饰符告诉 <code>v-on</code> 指令对于触发的事件调用 <code>event.preventDefault()</code></p>
+<figure class="highlight html"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">v-on:submit.prevent</span>=<span class="string">&quot;onSubmit&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="缩写">
+          <a href="#缩写" class="heading-link"><i class="fas fa-link"></i></a><a href="#缩写" class="headerlink" title="缩写"></a>缩写</h3>
+      <p><code>v-bind</code>和<code>v-on</code>是最常用的两个属性，缩写形式为</p>
+<p><code>v-bind</code></p>
+<figure class="highlight html"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 完整语法 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">v-bind:href</span>=<span class="string">&quot;url&quot;</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 缩写 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">:href</span>=<span class="string">&quot;url&quot;</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 动态参数的缩写 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">:</span>[<span class="attr">key</span>]=<span class="string">&quot;url&quot;</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p><code>v-on</code></p>
+<figure class="highlight html"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 完整语法 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">v-on:click</span>=<span class="string">&quot;doSomething&quot;</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 缩写 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> @<span class="attr">click</span>=<span class="string">&quot;doSomething&quot;</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 动态参数的缩写 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> @[<span class="attr">event</span>]=<span class="string">&quot;doSomething&quot;</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>缩写可以被正确的解析，且不会出现在最终的渲染标记中</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://gjssss.github.io">gjsss</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://gjssss.github.io/article/Vue3/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9Aday2-%E5%BA%94%E7%94%A8%E5%92%8C/">https://gjssss.github.io/article/Vue3/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9Aday2-%E5%BA%94%E7%94%A8%E5%92%8C/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://gjssss.github.io/tags/JavaScript/">JavaScript</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://gjssss.github.io/tags/Vue3/">Vue3</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img" src="/images/zfb.jpg"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img" src="/images/wx.png"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/article/Vue3/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9Aday3-data%E3%80%81%E6%96%B9%E6%B3%95%E5%92%8C%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">Vue3学习笔记：Day3 data、方法和计算属性</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/article/Vue3/vue3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9Aday1-%E5%88%9D%E8%AF%86vue/"><span class="paginator-prev__text">Vue3学习笔记：Day1 初识Vue</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div><div class="comments" id="comments"><div id="valine-container"></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue%E5%BA%94%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">
+          Vue应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">
+          组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%B1%9E%E6%80%A7"><span class="toc-number">2.1.</span> <span class="toc-text">
+          组件属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">2.2.</span> <span class="toc-text">
+          生命周期</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF"><span class="toc-number">3.</span> <span class="toc-text">
+          模板</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%9C%AC"><span class="toc-number">3.1.</span> <span class="toc-text">
+          文本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7"><span class="toc-number">3.2.</span> <span class="toc-text">
+          属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4"><span class="toc-number">3.3.</span> <span class="toc-text">
+          指令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0"><span class="toc-number">3.3.1.</span> <span class="toc-text">
+          动态参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-number">3.3.2.</span> <span class="toc-text">
+          修饰符</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%A9%E5%86%99"><span class="toc-number">3.4.</span> <span class="toc-text">
+          缩写</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://qlogo3.store.qq.com/qzone/1615590366/1615590366/100" alt="avatar"></div><p class="sidebar-ov-author__text">世界上只有一种英雄主义，那就是看清生活的本质之后依然热爱它</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/gjssss" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="tencent://snsapp/?cmd=2&amp;ver=1&amp;uin=1615590366" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">4</div><div class="sidebar-ov-state-item__name">分类</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>gjssss</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span></div><div>托管于 <a href="https://pages.github.com/" rel="noopener" target="_blank">Github Pages</a></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/leancloud-storage@latest/dist/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function loadValine () {
+  var GUEST_INFO = ['nick', 'mail', 'link'];
+  var guest_info = 'nick,mail,link';
+
+  guest_info = guest_info.split(',').filter(function(item) {
+    return GUEST_INFO.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#valine-container',
+    appId: 'JCthDOkCPwc0Bb4QouaTyS0W-gzGzoHsz',
+    appKey: 'QOLSVgtJvDuML7MvqrS4mxTt',
+    notify: true,
+    verify: true,
+    placeholder: '快来发表你的评论吧~',
+    avatar: 'mp',
+    meta: guest_info,
+    pageSize: '10' || 10,
+    visitor: false,
+    recordIP: true,
+    lang: 'zh-cn' || 'zh-cn',
+    path: window.location.pathname
+  });
+}
+
+if (false) {
+  loadValine();
+} else {
+  window.addEventListener('DOMContentLoaded', loadValine, false);
+}</script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
