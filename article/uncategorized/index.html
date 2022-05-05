@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="referrer" content="never"><meta data-draft-node="block" data-draft-type="table" data-size="normal" data-row-style="normal"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="baidu-site-verification" content="code-V14bejgNqx"><meta name="description" content="8指令CPU设计       目录： [toc]                     单周期硬布线控制器                           设计指令译码逻辑         首先从OpCode和FUNCT中提取选择的指令   根据表格中的OpCode和FUNCT的值来填写上面指令译码逻辑 首先对OpCode进行分类    OpCode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gjssss&#39; blog">
+<meta property="og:url" content="https://gjssss.github.io/article/uncategorized/index.html">
+<meta property="og:site_name" content="gjssss&#39; blog">
+<meta property="og:description" content="8指令CPU设计       目录： [toc]                     单周期硬布线控制器                           设计指令译码逻辑         首先从OpCode和FUNCT中提取选择的指令   根据表格中的OpCode和FUNCT的值来填写上面指令译码逻辑 首先对OpCode进行分类    OpCode">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gjssss.github.io/article/uncategorized/image-20220501012729107.png">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/d0001f0bec74effa3384296d79a3802b12c68497.png@942w_476h_progressive.webp">
+<meta property="og:image" content="https://gjssss.github.io/article/uncategorized/image-20220501013631417.png">
+<meta property="og:image" content="https://gjssss.github.io/article/uncategorized/image-20220501014446968.png">
+<meta property="og:image" content="https://gjssss.github.io/article/uncategorized/image-20220501014814608.png">
+<meta property="og:image" content="https://gjssss.github.io/article/uncategorized/image-20220501014853472.png">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/d220ef49d9a5bcb93582ed2b67ce2f9af07932ea.png@549w_429h_progressive.webp">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/cbe36791a537163cc8863c5e20b0a1e1c3b40c31.png@830w_381h_progressive.webp">
+<meta property="og:image" content="https://gjssss.github.io/article/uncategorized/image-20220501104727455.png">
+<meta property="og:image" content="https://gjssss.github.io/article/uncategorized/image-20220501105122410.png">
+<meta property="og:image" content="https://gjssss.github.io/article/uncategorized/image-20220501105251275.png">
+<meta property="og:image" content="https://gjssss.github.io/article/uncategorized/image-20220501105717653.png">
+<meta property="article:published_time" content="2022-04-30T17:23:05.843Z">
+<meta property="article:modified_time" content="2022-05-05T02:24:48.066Z">
+<meta property="article:author" content="gjsss">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gjssss.github.io/article/uncategorized/image-20220501012729107.png"><title>[ 文章无标题 ] | gjssss' blog</title><link ref="canonical" href="https://gjssss.github.io/article/uncategorized/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><link rel="dns-prefetch" href="https://hm.baidu.com"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = 'https://hm.baidu.com/hm.js?e5cf9a322772f32ad875e5168bfcc390';
+  hm.async = true;
+
+  if (false) {
+    hm.setAttribute('data-pjax', '');
+  }
+  var s = document.getElementsByTagName('script')[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();</script><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/reading/"><span class="header-nav-menu-item__icon"><i class="fas fa-book-open"></i></span><span class="header-nav-menu-item__text">阅读</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="javascript:;" onclick="return false;"><span class="header-nav-menu-item__icon"><i class="fas fa-align-left"></i></span><span class="header-nav-menu-item__text">文章</span></a><div class="header-nav-submenu"><div class="header-nav-submenu-item"><a class="header-nav-submenu-item__link" href="/archives/"><span class="header-nav-submenu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-submenu-item__text">归档</span></a></div><div class="header-nav-submenu-item"><a class="header-nav-submenu-item__link" href="/tags/"><span class="header-nav-submenu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-submenu-item__text">标签</span></a></div></div></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">gjssss' blog</div><div class="header-banner-info__subtitle"></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">[ 文章无标题 ]</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-05-01</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">319</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">1分</span></span></div></header><div class="post-body">
+        <h1 id="8指令CPU设计">
+          <a href="#8指令CPU设计" class="heading-link"><i class="fas fa-link"></i></a><a href="#8指令CPU设计" class="headerlink" title="8指令CPU设计"></a>8指令CPU设计</h1>
+      <p>目录：</p>
+<p>[toc]</p>
+
+        <h2 id="单周期硬布线控制器">
+          <a href="#单周期硬布线控制器" class="heading-link"><i class="fas fa-link"></i></a><a href="#单周期硬布线控制器" class="headerlink" title="单周期硬布线控制器"></a>单周期硬布线控制器</h2>
+      
+        <h3 id="设计指令译码逻辑">
+          <a href="#设计指令译码逻辑" class="heading-link"><i class="fas fa-link"></i></a><a href="#设计指令译码逻辑" class="headerlink" title="设计指令译码逻辑"></a>设计指令译码逻辑</h3>
+      <img src="/article/uncategorized/image-20220501012729107.png" alt="image-20220501012729107" style="zoom:67%;">
+
+<p>首先从<code>OpCode</code>和<code>FUNCT</code>中提取选择的指令</p>
+<img src="https://i0.hdslb.com/bfs/article/d0001f0bec74effa3384296d79a3802b12c68497.png@942w_476h_progressive.webp" alt="img" style="zoom:67%;">
+
+<p>根据表格中的<code>OpCode</code>和<code>FUNCT</code>的值来填写上面指令译码逻辑</p>
+<p>首先对<code>OpCode</code>进行分类</p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th align="center"><code>OpCode</code></th>
+<th>0</th>
+<th>4</th>
+<th>5</th>
+<th>8</th>
+<th>35</th>
+<th>43</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">指令</td>
+<td>ADD &amp; SLT &amp; SYSCALL</td>
+<td>BEQ</td>
+<td>BNE</td>
+<td>ADDI</td>
+<td>LW</td>
+<td>SW</td>
+</tr>
+</tbody></table></div>
+<p>填入对应的值</p>
+<img src="/article/uncategorized/image-20220501013631417.png" alt="image-20220501013631417" style="zoom:67%;">
+
+<p>随后设计<code>OpCode=0x00</code>时<code>FUNCT</code>的逻辑，根据上面表格可以使用与门和比较器来实现。</p>
+<img src="/article/uncategorized/image-20220501014446968.png" alt="image-20220501014446968" style="zoom:67%;">
+
+<p>其中的<code>R_TYPE</code>引脚为除了<code>SysCall</code>之外的R类型指令，所以其逻辑为<code>(ADD^SLT) &amp; ~SysCall</code></p>
+<img src="/article/uncategorized/image-20220501014814608.png" alt="image-20220501014814608" style="zoom:67%;">
+
+<p>所以整体的指令译码逻辑为</p>
+<img src="/article/uncategorized/image-20220501014853472.png" alt="image-20220501014853472" style="zoom:67%;">
+
+
+        <h3 id="ALU控制器逻辑">
+          <a href="#ALU控制器逻辑" class="heading-link"><i class="fas fa-link"></i></a><a href="#ALU控制器逻辑" class="headerlink" title="ALU控制器逻辑"></a>ALU控制器逻辑</h3>
+      <p>首先观察需要用到<code>ALU_OP</code>控制的指令，一共有五个<code>ADD</code> <code>ADDI</code> <code>LW</code> <code>SW</code> 和<code>SLT</code>。其中前面四个进行加法运算<code>ALU_OP = 5</code>而SLT进行比较运算<code>ALU_OP = 11</code>，所以可以不使用给定的<code>OP</code>和<code>FUNC</code>隧道引脚，重新建立一个SLT隧道用多路选择器来选择<code>ALU_OP</code>的值。</p>
+<img src="https://i0.hdslb.com/bfs/article/d220ef49d9a5bcb93582ed2b67ce2f9af07932ea.png@549w_429h_progressive.webp" alt="img" style="zoom:67%;">
+
+<p>或者使用比较器和多路选择器也可以分离出SLT指令实现</p>
+
+        <h3 id="机器输出信号的控制">
+          <a href="#机器输出信号的控制" class="heading-link"><i class="fas fa-link"></i></a><a href="#机器输出信号的控制" class="headerlink" title="机器输出信号的控制"></a>机器输出信号的控制</h3>
+      <p><img src="https://i0.hdslb.com/bfs/article/cbe36791a537163cc8863c5e20b0a1e1c3b40c31.png@830w_381h_progressive.webp" alt="img"></p>
+<img src="/article/uncategorized/image-20220501104727455.png" alt="image-20220501104727455" style="zoom:67%;">
+
+<p>根据各个控制信号产生的逻辑连接电路</p>
+<img src="/article/uncategorized/image-20220501105122410.png" alt="image-20220501105122410" style="zoom:67%;">
+
+<p>最后，我连好的整个电路如下图所示</p>
+<img src="/article/uncategorized/image-20220501105251275.png" alt="image-20220501105251275" style="zoom:67%;">
+
+
+        <h2 id="连接数据通路">
+          <a href="#连接数据通路" class="heading-link"><i class="fas fa-link"></i></a><a href="#连接数据通路" class="headerlink" title="连接数据通路"></a>连接数据通路</h2>
+      <img src="/article/uncategorized/image-20220501105717653.png" alt="image-20220501105717653" style="zoom:67%;">
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://gjssss.github.io">gjsss</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://gjssss.github.io/article/uncategorized/">https://gjssss.github.io/article/uncategorized/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img" src="/images/zfb.jpg"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img" src="/images/wx.png"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/article/LeetCode/53-%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/"><span class="paginator-prev__text">53.最大子数组和</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div><div class="comments" id="comments"><div id="valine-container"></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#8%E6%8C%87%E4%BB%A4CPU%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.</span> <span class="toc-text">
+          8指令CPU设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E5%91%A8%E6%9C%9F%E7%A1%AC%E5%B8%83%E7%BA%BF%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">
+          单周期硬布线控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%8C%87%E4%BB%A4%E8%AF%91%E7%A0%81%E9%80%BB%E8%BE%91"><span class="toc-number">1.1.1.</span> <span class="toc-text">
+          设计指令译码逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ALU%E6%8E%A7%E5%88%B6%E5%99%A8%E9%80%BB%E8%BE%91"><span class="toc-number">1.1.2.</span> <span class="toc-text">
+          ALU控制器逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%BA%E5%99%A8%E8%BE%93%E5%87%BA%E4%BF%A1%E5%8F%B7%E7%9A%84%E6%8E%A7%E5%88%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">
+          机器输出信号的控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF"><span class="toc-number">1.2.</span> <span class="toc-text">
+          连接数据通路</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://qlogo3.store.qq.com/qzone/1615590366/1615590366/100" alt="avatar"></div><p class="sidebar-ov-author__text">世界上只有一种英雄主义，那就是看清生活的本质之后依然热爱它</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/gjssss" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="tencent://snsapp/?cmd=2&amp;ver=1&amp;uin=1615590366" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">7</div><div class="sidebar-ov-state-item__name">分类</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>gjssss</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span></div><div>托管于 <a href="https://pages.github.com/" rel="noopener" target="_blank">Github Pages</a></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/leancloud-storage@latest/dist/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script><script>function loadValine () {
+  var GUEST_INFO = ['nick', 'mail', 'link'];
+  var guest_info = 'nick,mail,link';
+
+  guest_info = guest_info.split(',').filter(function(item) {
+    return GUEST_INFO.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#valine-container',
+    appId: 'JCthDOkCPwc0Bb4QouaTyS0W-gzGzoHsz',
+    appKey: 'QOLSVgtJvDuML7MvqrS4mxTt',
+    notify: true,
+    verify: true,
+    placeholder: '快来发表你的评论吧~',
+    avatar: 'mp',
+    meta: guest_info,
+    pageSize: '10' || 10,
+    visitor: false,
+    recordIP: true,
+    lang: 'zh-cn' || 'zh-cn',
+    path: window.location.pathname
+  });
+}
+
+if (false) {
+  loadValine();
+} else {
+  window.addEventListener('DOMContentLoaded', loadValine, false);
+}</script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script></body></html>
